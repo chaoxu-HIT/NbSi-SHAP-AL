@@ -51,8 +51,12 @@ def split_initial_pool(
     n_samples: int,
     n_initial: int,
     random_state: int = 0,
-) -> tuple[list[int], list[int]]:
+) -> list[int]:
     """Randomly select *n_initial* indices as the initial labelled pool.
+
+    The remaining indices form the unlabelled candidate pool, which the
+    :class:`~src.active_learning.ActiveLearner` computes internally by
+    taking the complement of the labelled set.
 
     Parameters
     ----------
@@ -66,13 +70,12 @@ def split_initial_pool(
     Returns
     -------
     initial_indices : list[int]
-    candidate_indices : list[int]
+        Indices of the initially labelled samples.
     """
     rng = np.random.default_rng(random_state)
     all_idx = np.arange(n_samples)
     rng.shuffle(all_idx)
-    initial = list(all_idx[:n_initial])
-    return initial
+    return list(all_idx[:n_initial])
 
 
 # ---------------------------------------------------------------------------
